@@ -5,33 +5,16 @@ const mongoose = require('mongoose')
 
 const jwtSecret = process.env.JWT_SECRET
 
-//gera token do usuário
-const generateToken = (id)=>{
-    return jwt.sign(
-    {id}, 
-    jwtSecret, 
-    {expiresIn:'7d'}
-    )
-}
-
 // registra um usuário
-const registrar = async (req, res)=>{
+const register = async (req, res)=>{
     const {nome, matricula, turma} = req.body
 
     //verifica se o usuário já existe no sistema
     const aluno = await Aluno.findOne({matricula})
-    //const aluno = await Aluno.findOne({matricula})
-
     if (aluno) {  
          res.status(422).json({errors:['Matrícula já cadastrada']})
          return
     }
-
-    //gera senha hash
-    /* const salt = await bcrypt.genSalt()
-
-    const passwordHash = await bcrypt.hash(password, salt) */
-    
     //cria um aluno
     const novoAluno = await Aluno.create({
         nome,
@@ -40,17 +23,13 @@ const registrar = async (req, res)=>{
         urlImagem:`${matricula}.jpg`
     }) 
 
-    //cerifica se o usuáriofoi criado com sucesso e retorna o token 
+    //cerifica se o usuáriofoi criado com sucesso e retorna o aluno
     if (!novoAluno) {
          res.status(422).json({errors:['Erro inesperado. Favor tentar novamnete.']})
          return
     }
 
-    res.status(201).json({
-        _id: novoAluno._id,
-        nome: novoAluno.nome,
-        //token: generateToken(newUser._id)
-    })
+    res.status(201).json(novoAluno)
 }
 
  //loga o usuário no sistema
@@ -86,41 +65,31 @@ const getCurrentUser = (req, res)=>{
 }
 
 //atualiza um usuário
-/* const  update = async(req, res)=>{
-     const {name, password, bio} = req.body 
-     let profileImage = null
-
-     const reqUser = req.user
+const update = async (req, res) => {
+     const { id } = req.params
+     const {nome, matricula, turma} = req.body 
      
-     if (req.file) {
-     profileImage = req.file.filename
+     const aluno = await Aluno.findById(new mongoose.Types.ObjectId(id))
+
+     if (nome) {
+          aluno.nome = nome
      }
 
-     const user = await User.findById(new mongoose.Types.ObjectId(reqUser._id)).select('-password')
-
-     if (name) {
-          user.name = name
+     if (matricula) {
+          aluno.matricula = matricula
+          aluno.urlImagem = `${matricula}.jpg`
      }
 
-     if (password) {
-          //gera senha hash
-          const salt = await bcrypt.genSalt()
-          const passwordHash = await bcrypt.hash(password, salt)
-          user.password = passwordHash
+     if (turma) {
+          aluno.turma = turma
      }
 
-     if (profileImage) {
-          user.profileImage = profileImage
-     }
-
-     if (bio) {
-          user.bio = bio
-     } 
      
-     await user.save()
+     await aluno.save()
 
-     res.status(200).json(user)
-} */
+     res.status(200).json(aluno)
+}
+
 
 // busca um usuário pelo id
 /* const  getUserById = async(req, res)=>{
@@ -143,9 +112,10 @@ const getCurrentUser = (req, res)=>{
 } */
 
 module.exports = {
-    registrar,
+     register,
+     update,
    /*  login,
     getCurrentUser,
-    update,
+    
     getUserById, */
 }
