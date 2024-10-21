@@ -1,9 +1,5 @@
 const Aluno = require('../models/Aluno.js') 
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
-
-const jwtSecret = process.env.JWT_SECRET
 
 // registra um usuário
 const register = async (req, res)=>{
@@ -32,38 +28,6 @@ const register = async (req, res)=>{
     res.status(201).json(novoAluno)
 }
 
- //loga o usuário no sistema
-/*  const  login = async(req, res)=>{
-     const {email, password} = req.body
-
-     const user = await User.findOne({email})
-
-     //verifica se o usuário existe
-     if (!user) {
-          res.status(404).json({errors:['Usuário não encontrado.']})
-          return
-     }
-
-     //verifica as senhas
-     if (!(await bcrypt.compare(password, user.password))) {
-          res.status(422).json({errors:['Senha inválida.']})
-          return
-     }
-
-     //retorna o usuário com o token
-     res.status(201).json({
-          _id: user._id,
-          //profieImage: user.profileImage,
-          token: generateToken(user._id)
-     })
-} */
-
-// pega o usuário logado
-const getCurrentUser = (req, res)=>{
-     const user = req.user
-     res.status(200).json(user)
-}
-
 //atualiza um usuário
 const update = async (req, res) => {
      const { id } = req.params
@@ -89,33 +53,66 @@ const update = async (req, res) => {
 
      res.status(200).json(aluno)
 }
-
-
 // busca um usuário pelo id
-/* const  getUserById = async(req, res)=>{
-     const {id} = req.params
+const getAlunoById = async (req, res) => {
+     const { id } = req.params
 
      try {
-          const user = await User.findById(new mongoose.Types.ObjectId(id)).select('-password')
+          const aluno = await Aluno.findById(new mongoose.Types.ObjectId(id))
 
-          if(!user) {
-               res.status(404).json({errors:['Usuário não encontrado']}) 
+          if (!aluno) {
+               res.status(404).json({ errors: ['Aluno não encontrado'] })
                return
           }
 
-          res.status(200).json(user)
+          res.status(200).json(aluno)
 
      } catch (error) {
-          res.status(404).json({errors:['Usuário não encontrado']}) 
+          res.status(404).json({ errors: ['Aluno não encontrado'] })
+          return
+     }
+}
+
+// busca um usuário pelo id
+const  getAllAlunos = async(req, res)=>{
+
+     try {
+          const alunos = await Aluno.find()
+          res.status(200).json(alunos)
+
+     } catch (error) {
+          res.status(404).json({errors:['Ocorreu um erro. Tente novamente.']}) 
           return 
      }
-} */
+}
+
+// busca um usuário pelo id
+const deleteById = async (req, res) => {
+
+     const { id } = req.params
+     try {
+          const aluno = await Aluno.findById(new mongoose.Types.ObjectId(id))
+          //verifica se o aluno existe
+          if (!aluno) {
+               res.status(404).json({ errors: ["Aluno não encontrado"] })
+               return
+          }
+
+          await Aluno.findByIdAndDelete(aluno._id)
+
+          res.status(201).json({ id: aluno.id, message: "Aluno exluido com sucesso" })
+
+     } catch (error) {
+          console.log(error)
+          res.status(404).json({ errors: ['Aluno não encontrado.'] })
+          return
+     }
+}
 
 module.exports = {
      register,
      update,
-   /*  login,
-    getCurrentUser,
-    
-    getUserById, */
+     getAlunoById,
+     getAllAlunos,
+     deleteById,
 }
