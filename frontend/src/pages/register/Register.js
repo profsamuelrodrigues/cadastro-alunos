@@ -33,8 +33,6 @@ const Register = () => {
     const res = await fetch(`${api}/alunos/register`, config)
     const data = await res.json()
     console.log(data)
-
-    //dispatch(register(user))
   }
   
   return (
