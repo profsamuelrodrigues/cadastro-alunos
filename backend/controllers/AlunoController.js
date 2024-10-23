@@ -16,7 +16,7 @@ const register = async (req, res)=>{
         nome,
         matricula,
         turma,
-        urlImagem:`${matricula}.jpg`
+        photo:`${matricula}.jpg`
     }) 
 
     //cerifica se o usuáriofoi criado com sucesso e retorna o aluno
@@ -41,7 +41,7 @@ const update = async (req, res) => {
 
      if (matricula) {
           aluno.matricula = matricula
-          aluno.urlImagem = `${matricula}.jpg`
+          aluno.photo = `${matricula}.jpg`
      }
 
      if (turma) {

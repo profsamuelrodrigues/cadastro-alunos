@@ -1,9 +1,47 @@
 import  './Home.css'
+import{useState, useEffect}from 'react'
+const url = 'http://localhost:5000/alunos'
 
 const Home = () => {
+ const [alunos, setAlunos]= useState([])
+ const [aluno, setAluno]=useState('')
+  
+  const getAllAlunos=async()=>{
+    const res = await fetch(url)
+    const data = await res.json()
+    setAlunos(data)
+  }
+
+  const editar =  (id)=>{
+    const items = alunos.filter(item=>(
+      item._id == id
+    ))
+    setAluno(items[0])
+  }
+  
+  useEffect(()=>{
+    getAllAlunos()
+  },[])
+
+  useEffect(()=>{
+    console.log(aluno)
+  },[aluno])
+
   return (
-      <div>
-          <h1>Home</h1>
+      <div className='home'>
+          <h1>Alunos</h1>
+          <ul>
+          {alunos.map((aluno)=>(
+              <li key={aluno._id}>
+                <div>
+                  <h3 className='nome'>{aluno.nome}</h3>
+                  <p className='matricula'> Matrìcula: {aluno.matricula} - Turma: {aluno.turma}</p>
+                </div>
+                <input type="submit" id={aluno._id} value='Editar' onClick={e=>editar(e.target.id)} />
+              </li>   
+            ))}
+          </ul>
+            
       </div>
   )
 }

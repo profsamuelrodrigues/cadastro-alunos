@@ -6,7 +6,7 @@ const userSchema = new Schema(
         nome: String,
         matricula: String,
         turma: String,
-        urlImagem: String,
+        photo: String,
     },
     {
         timestamps: true

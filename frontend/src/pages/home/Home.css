@@ -1,0 +1,23 @@
+
+.home{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+li{
+    background-color: #555;
+    min-width: 50vw;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    margin-bottom: 5px;
+}
+
+li:hover{
+    background-color: #777;
+}
+h3,p{
+    padding: 0;
+    margin: 0;
+}
