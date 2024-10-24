@@ -1,4 +1,5 @@
 #register,
+#edit,
 #login {
     background-color: #000;
     border: 1px slid #363636;
@@ -8,6 +9,7 @@
 }
 
 #register h2,
+#edit h2,
 #login h2 {
     text-align: center;
     font-size: 2.1em;
@@ -15,11 +17,13 @@
 }
 
 #register p,
+#edit p,
 #login p {
     text-align: center;
 }
 
 #register p a,
+#edit p a,
 #login p a {
     font-weight: bold;
     color: #0094f6;
@@ -32,6 +36,7 @@
 }
 
 #register form,
+#edit form,
 #login form {
     padding-bottom: 1.5em;
     margin-bottom: 1.5em;

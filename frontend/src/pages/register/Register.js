@@ -1,17 +1,14 @@
 import './Register.css'
 
-//comonents
-import { Link } from 'react-router-dom'
-
 //Hooks
 import { useState } from "react"
 
-const Register = () => {
 
-  const [nome, setNome] = useState("")
+const Register = () => {
+  const [nome, setNome] = useState('')
   const [matricula, setMatricula] = useState("")
   const [turma, setTurma] = useState("")
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault()
 

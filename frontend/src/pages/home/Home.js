@@ -1,10 +1,19 @@
 import  './Home.css'
 import{useState, useEffect}from 'react'
+import { useNavigate } from "react-router-dom";
+import { atualizaAluno} from '../../slices/alunoSlice'
+import { useDispatch } from 'react-redux'
+
 const url = 'http://localhost:5000/alunos'
 
 const Home = () => {
- const [alunos, setAlunos]= useState([])
- const [aluno, setAluno]=useState('')
+
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  
+  const [alunos, setAlunos]= useState([])
+  const [aluno, setAluno]=useState()
+  
   
   const getAllAlunos=async()=>{
     const res = await fetch(url)
@@ -14,18 +23,22 @@ const Home = () => {
 
   const editar =  (id)=>{
     const items = alunos.filter(item=>(
-      item._id == id
+      item._id === id
     ))
     setAluno(items[0])
-  }
+    }
   
   useEffect(()=>{
     getAllAlunos()
   },[])
 
   useEffect(()=>{
-    console.log(aluno)
-  },[aluno])
+    
+    dispatch(atualizaAluno(aluno))
+    if (aluno) {
+      navigate("/edit")
+    }
+  },[aluno, dispatch, navigate])
 
   return (
       <div className='home'>
