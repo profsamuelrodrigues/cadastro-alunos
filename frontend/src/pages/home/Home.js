@@ -50,7 +50,10 @@ const Home = () => {
                   <h3 className='nome'>{aluno.nome}</h3>
                   <p className='matricula'> Matrìcula: {aluno.matricula} - Turma: {aluno.turma}</p>
                 </div>
+                <div>
                 <input type="submit" id={aluno._id} value='Editar' onClick={e=>editar(e.target.id)} />
+                <input type="submit" id={aluno._id} value='Excluir' onClick={e=>editar(e.target.id)} />
+                </div>
               </li>   
             ))}
           </ul>
